@@ -64,7 +64,8 @@ def get_latest_message(bot):
     } 
     author_nickname = ""
     state = "incomplete"
-    while True:
+    text = None
+    for _ in range(5):
         time.sleep(2)
         response = requests.post(url, headers=headers, json=data)
         response_json = response.json()
