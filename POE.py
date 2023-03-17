@@ -64,7 +64,6 @@ def get_latest_message(bot):
     } 
     author_nickname = ""
     state = "incomplete"
-    text = None
     for _ in range(5):
         time.sleep(2)
         response = requests.post(url, headers=headers, json=data)
@@ -73,6 +72,6 @@ def get_latest_message(bot):
         state = response_json['data']['chatOfBot']['messagesConnection']['edges'][-1]['node']['state']
         author_nickname = response_json['data']['chatOfBot']['messagesConnection']['edges'][-1]['node']['authorNickname']
         if author_nickname==bot and state=='complete':
-            break
-    return text
+            return text
+    return None
 
