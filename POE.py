@@ -52,7 +52,7 @@ def clear_context(chatid):
     }    
     _ = requests.post(url, headers=headers, json=data)
 
-def get_latest_message(bot):
+def get_latest_message(bot, retry=5):
     data = {
         "operationName": "ChatPaginationQuery",
         "query": "query ChatPaginationQuery($bot: String!, $before: String, $last: Int! = 10) {\n  chatOfBot(bot: $bot) {\n    id\n    __typename\n    messagesConnection(before: $before, last: $last) {\n      __typename\n      pageInfo {\n        __typename\n        hasPreviousPage\n      }\n      edges {\n        __typename\n        node {\n          __typename\n          ...MessageFragment\n        }\n      }\n    }\n  }\n}\nfragment MessageFragment on Message {\n  id\n  __typename\n  messageId\n  text\n  linkifiedText\n  authorNickname\n  state\n  vote\n  voteReason\n  creationTime\n}",
@@ -64,7 +64,7 @@ def get_latest_message(bot):
     } 
     author_nickname = ""
     state = "incomplete"
-    for _ in range(5):
+    for _ in range(retry):
         time.sleep(2)
         response = requests.post(url, headers=headers, json=data)
         response_json = response.json()
