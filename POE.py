@@ -14,6 +14,11 @@ headers = {
     'Content-Type': 'application/json',
 }
 
+proxies = None
+
+def set_proxy(proxy):
+    proxy = {'https': proxy}
+
 def set_auth(key, value):
     headers[key] = value
 
@@ -25,7 +30,7 @@ def load_chat_id_map(bot="a2"):
             'bot': bot
         }
     }    
-    response = requests.post(url, headers=headers, json=data)
+    response = requests.post(url, headers=headers, json=data, proxies=proxies)
     return response.json()['data']['chatOfBot']['chatId']
 
 def send_message(message,bot="a2",chat_id=""):
@@ -40,7 +45,7 @@ def send_message(message,bot="a2",chat_id=""):
         "withChatBreak": False
     }
 }
-    _ = requests.post(url, headers=headers, json=data)
+    _ = requests.post(url, headers=headers, json=data, proxies=proxies)
 
 def clear_context(chatid):
     data = {
@@ -50,7 +55,7 @@ def clear_context(chatid):
             "chatId": chatid
         }
     }    
-    _ = requests.post(url, headers=headers, json=data)
+    _ = requests.post(url, headers=headers, json=data, proxies=proxies)
 
 def get_latest_message(bot, retry=5):
     data = {
@@ -66,7 +71,7 @@ def get_latest_message(bot, retry=5):
     state = "incomplete"
     for _ in range(retry):
         time.sleep(2)
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=proxies)
         response_json = response.json()
         text = response_json['data']['chatOfBot']['messagesConnection']['edges'][-1]['node']['text']
         state = response_json['data']['chatOfBot']['messagesConnection']['edges'][-1]['node']['state']
