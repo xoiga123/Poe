@@ -29,7 +29,11 @@ def load_chat_id_map(bot="a2", formkey=None, cookie=None, proxies=None):
         'variables': {
             'bot': bot
         }
-    }    
+    }
+    if formkey:
+        headers['Quora-Formkey'] = formkey
+    if cookie:
+        headers['Cookie'] = cookie
     response = requests.post(url, headers=headers, json=data, proxies=proxies)
     return response.json()['data']['chatOfBot']['chatId']
 
@@ -45,6 +49,10 @@ def send_message(message,bot="a2",chat_id="", formkey=None, cookie=None, proxies
         "withChatBreak": False
     }
 }
+    if formkey:
+        headers['Quora-Formkey'] = formkey
+    if cookie:
+        headers['Cookie'] = cookie
     _ = requests.post(url, headers=headers, json=data, proxies=proxies)
 
 def clear_context(chatid, formkey=None, cookie=None, proxies=None):
@@ -54,7 +62,11 @@ def clear_context(chatid, formkey=None, cookie=None, proxies=None):
         "variables": {
             "chatId": chatid
         }
-    }    
+    }
+    if formkey:
+        headers['Quora-Formkey'] = formkey
+    if cookie:
+        headers['Cookie'] = cookie
     _ = requests.post(url, headers=headers, json=data, proxies=proxies)
 
 def get_latest_message(bot, retry=5, formkey=None, cookie=None, proxies=None):
@@ -66,7 +78,11 @@ def get_latest_message(bot, retry=5, formkey=None, cookie=None, proxies=None):
             "bot": bot,
             "last": 1
         }
-    } 
+    }
+    if formkey:
+        headers['Quora-Formkey'] = formkey
+    if cookie:
+        headers['Cookie'] = cookie
     author_nickname = ""
     state = "incomplete"
     for _ in range(retry):
