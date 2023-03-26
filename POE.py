@@ -22,7 +22,7 @@ def set_proxy(proxy):
 def set_auth(key, value):
     headers[key] = value
 
-def load_chat_id_map(bot="a2", formkey=None, cookie=None, proxies=None):
+def load_chat_id_map(bot="a2", formkey=None, cookie=None, proxies=None, timeout=None):
     data = {
         'operationName': 'ChatViewQuery',
         'query': 'query ChatViewQuery($bot: String!) {\n  chatOfBot(bot: $bot) {\n    __typename\n    ...ChatFragment\n  }\n}\nfragment ChatFragment on Chat {\n  __typename\n  id\n  chatId\n  defaultBotNickname\n  shouldShowDisclaimer\n}',
@@ -34,7 +34,7 @@ def load_chat_id_map(bot="a2", formkey=None, cookie=None, proxies=None):
         headers['Quora-Formkey'] = formkey
     if cookie:
         headers['Cookie'] = cookie
-    response = requests.post(url, headers=headers, json=data, proxies=proxies)
+    response = requests.post(url, headers=headers, json=data, proxies=proxies, timeout=timeout)
     return response.json()['data']['chatOfBot']['chatId']
 
 def send_message(message,bot="a2",chat_id="", formkey=None, cookie=None, proxies=None):
